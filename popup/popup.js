@@ -2,6 +2,7 @@ const form = document.getElementById('dic:form');
 const input = document.getElementById('dic:inputString');
 const message = document.getElementById('message');
 const answer = document.getElementById('chatgpt:answer');
+const loading = document.getElementById('chatgpt:loading');
 
 var widget, views = 0, curTrack = 0, totalTracks = 0;
 const OPENAI_API_KEY = '';
@@ -15,14 +16,14 @@ if (OPENAI_API_KEY.length === 0) {
   console.log('popup script loaded');
   form.addEventListener('submit', handleFormSubmit);
 
-  let message = await deleteDomainCookies('youglish.com');
-  setMessage(message);
+  await deleteDomainCookies('youglish.com');
   input.focus();
 })();
 
 async function handleFormSubmit(event) {
   event.preventDefault();
 
+  setLoading();
   clearMessage();
   clearAnswer();
 
@@ -34,8 +35,14 @@ async function handleFormSubmit(event) {
     return;
   }
 
-  await getAnswerFromChatGPT(word);
-  await searchYouglish(word);
+  Promise.all([
+    getAnswerFromChatGPT(word),
+    searchYouglish(word),
+  ])
+  .catch(err => {
+    setMessage(err.message);
+    clearLoading();
+  })
 }
 
 async function deleteDomainCookies(domain) {
@@ -106,12 +113,14 @@ async function getAnswerFromChatGPT(word) {
     console.log('init', init);
     console.log('response', response);
 
+    clearLoading();
     setAnswer(answer);
 
   } catch(err) {
     console.error('getAnswerFromChatGPT: ', err.message);
     setMessage(err.message);
     clearAnswer();
+    clearLoading();
   }
 }
 
@@ -121,7 +130,7 @@ async function searchYouglish(word) {
     widget = new YG.Widget('youglish:widget', {
       width: 480,
       autoStart: 1,
-      components: 8287, //search box & caption 
+      components: 94, // 64 + 16 + 8 + 4 + 2
       events: {
         'onFetchDone': onFetchDone,
         'onVideoChange': onVideoChange,
@@ -135,6 +144,7 @@ async function searchYouglish(word) {
     console.error('searchYouglish: ', err.message);
     setMessage(err.message);
     clearAnswer();
+    clearLoading();
   }
 }
 
@@ -181,3 +191,10 @@ function clearAnswer() {
   answer.hidden = true;
 }
 
+function setLoading() {
+  loading.hidden = false;
+}
+
+function clearLoading() {
+  loading.hidden = true;
+}
