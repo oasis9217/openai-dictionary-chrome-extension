@@ -1,0 +1,33 @@
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="./popup.css" />
+    <script src="./popup.js" type="module"></script>
+    <script async src="../scripts/widget.js" charset="utf-8"></script>
+  </head>
+  <body>
+    
+    <h1> OpenAI Dictionary with Youglish! </h1>
+
+    <span id="message" hidden></span>
+
+    <div id="dic">
+      <h2> 🔍 Search a word </h2>
+      <form id="dic:form">
+        <input type="text" id="dic:inputString" />
+        <button id="dic:search">Search</button>
+      </form>
+    </div>
+
+    <div id="chatgpt">
+      <h2> 💡 Answer from ChatGPT </h2>
+      <span id="chatgpt:answer"></span>
+    </div>
+
+    <div id="youglish">
+      <h2> 📣 Check out how it sounds </h2>
+      <div id="youglish:widget"></div>
+    </div>
+
+  </body>
+</html>

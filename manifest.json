@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "AI Dictionary",
+    "description": "Dictionary providing a word transation, suggestions and its pronounciation",
+    "version": "1.0",
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon": "images/dictionary.png"
+    },
+    "host_permissions": [
+      "*://*.youglish.com/"
+    ],
+    "permissions": ["cookies"],
+    "author": "oasis9217@gmail.com"
+  }
